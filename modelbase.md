@@ -123,3 +123,4 @@ Skill: modelbase
   ```
   
   * 集合类型的数据也就是[]类型的属性，不能有**@persistence**的标注。
+  * 不要把值体对象作为conjunction，直接把值体对象集合类型的对象。
