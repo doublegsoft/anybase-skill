@@ -9,7 +9,7 @@ Skill: modelbase
 
 ### 持久化对象命名
 
-1. 实体对象的定义：只有一个标识字段的我们称之为实体对象。它的持久化名称以tn开头，第二部分是模块名称的缩写，第三部分是对象名称的缩写。
+* 实体对象的定义：只有一个标识字段的我们称之为实体对象。它的持久化名称以tn开头，第二部分是模块名称的缩写，第三部分是对象名称的缩写。
 
   ```
   @persistence(name='tn_pm_proj')
@@ -22,7 +22,7 @@ Skill: modelbase
   >
   ```
   
-2. 值体对象的定义：有两个及以上的标识字段的对象，并且它其中一个或多个标识字段是引用了其他对象，我们称之为值体对象。 它的持久化名称以tv开头，第二部分是模块名称的缩写，第三部分是对象名称的缩写。
+* 值体对象的定义：有两个及以上的标识字段的对象，并且它其中一个或多个标识字段是引用了其他对象，我们称之为值体对象。 它的持久化名称以tv开头，第二部分是模块名称的缩写，第三部分是对象名称的缩写。
 
   ```
   @persistence(name='tv_pm_projmem')
@@ -38,7 +38,7 @@ Skill: modelbase
   >
   ```
   
-3. 连接对象的定义：有两个及以上的标识字段的对象，并且它其中一个或多个标识字段是引用了其他对象，而且除了标识字段以外没有其他业务字段，我们称之为值体对象。 它的持久化名称以tx开头，第二部分是模块名称的缩写，第三部分是对象名称的缩写。
+* 连接对象的定义：有两个及以上的标识字段的对象，并且它其中一个或多个标识字段是引用了其他对象，而且除了标识字段以外没有其他业务字段，我们称之为连接对象。 它的持久化名称以tx开头，第二部分是模块名称的缩写，第三部分是对象名称的缩写。
 
   ```
   @persistence(name='tx_hrm_emplrol')
@@ -54,6 +54,19 @@ Skill: modelbase
   >
   ```
   
+* 常量对象的定义：通常是数据字典，我们称之为常量对象。它的持久化名称以tc开头，第二部分是模块名称的缩写，第三部分是对象名称的缩写。
+
+
+  ```
+  @persistence(name='tc_hrm_pos')
+  position<
+  
+    @persistence(name='posid'>
+    id!!: long,
+  
+    ...
+  >
+  ```  
 
 
 ### 持久化字段命名
@@ -81,3 +94,30 @@ Skill: modelbase
   name!!: long
   ```
   这个字段是project_message的字段，对象名称是project_message，name的缩写是nm，所以它的持久化名称就是proj + msg + nm = projmsgnm。
+  
+### 易出错的字段类型
+
+* 日期、时间、时间戳都用**datetime**类型。
+* 可以有小数位的数字用**number**类型，通常为**number(12,4)**，12是总共长度，4是小数位数
+* 主键用**long**类型
+
+### 其他要求
+
+* 对象和属性都要加上**@name**，并且需要加上合理的plural和singular。
+
+  ```
+  @persistence(name='tn_pm_proj')
+  @name(label='项目', plural='projects')
+  project<
+  
+    @persistence(name='projid'>
+    @name(label='项目标识')
+    id!!: long,
+    
+    @name(label='项目成员', singular='member')
+    @conjunction(object='project_member')
+    members: &employee(id)[],
+    ...
+  >
+
+  ```
