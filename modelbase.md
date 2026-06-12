@@ -121,3 +121,5 @@ Skill: modelbase
   >
 
   ```
+  
+  * 集合类型的数据也就是[]类型的属性，不能有**@persistence**的标注。
